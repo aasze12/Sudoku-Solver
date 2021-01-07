@@ -8,7 +8,6 @@ board = [[5, 3, 0, 0, 7, 0, 0, 0, 0],
          [0, 0, 0, 4, 1, 9, 0, 0, 5],
          [0, 0, 0, 0, 8, 0, 0, 7, 9]]
 
-# Problem 1
 def print_board(board):
     
     # If there is no board
@@ -31,6 +30,7 @@ def print_board(board):
         if i % 3 == 0:
             print(hor_boundary)
         print_row = ""
+        
         for j in range(num_cols):
             if j % 3 == 0:
                 print_row += ver_boundary
@@ -42,27 +42,37 @@ def print_board(board):
             print_row += value + " "
         print_row += ver_boundary
         print(print_row)   
+
     print(hor_boundary)
 
-# Problem 2
 def find_zero(board):
     num_rols = len(board)
     num_cols = len(board[0])
+
     for i in range(num_rols):
         for j in range(num_cols):
             if board[i][j] == 0:
                 return [i,j]
 
-# Problem 3
+
 def is_valid(board, row, col, value):
-    num_rols = len(board)
-    num_cols = len(board[0])
-    
-    for i in num_rols[row]:
+
+    # Check the row
+    for i in board[row]:
         if i == value:
             return False
-    
-    for j in num_cols[col]:
+
+    # Check the column
+    for j in board[col]:
         if j == value:
             return False
+
+    # Check the grid
+    x = (row // 3) * 3
+    y = (col // 3) * 3
+
+    for i in range(x, x+3):
+        for j in range(y, y+3):
+            if board[i][j] == value:
+                return False
     return True
