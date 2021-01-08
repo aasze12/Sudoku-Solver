@@ -30,7 +30,7 @@ def print_board(board):
         if i % 3 == 0:
             print(hor_boundary)
         print_row = ""
-        
+
         for j in range(num_cols):
             if j % 3 == 0:
                 print_row += ver_boundary
@@ -61,7 +61,6 @@ def is_valid(board, row, col, value):
     for i in board[row]:
         if i == value:
             return False
-
     # Check the column
     for j in board[col]:
         if j == value:
@@ -76,3 +75,21 @@ def is_valid(board, row, col, value):
             if board[i][j] == value:
                 return False
     return True
+
+def solve(board):
+
+    row, col = find_zero(board)
+
+    if row is None:
+            return False
+
+    for value in range(1, 10):
+        if is_valid(board, row, col, value):
+            board[row][col] == value
+            if solve(board):
+                return True
+        board[row][col] == 0
+        return False
+
+solve(board)
+print(board)
