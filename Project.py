@@ -1,95 +1,67 @@
-board = [[5, 3, 0, 0, 7, 0, 0, 0, 0],
-         [6, 0, 0, 1, 9, 5, 0, 0, 0],
-         [0, 9, 8, 0, 0, 0, 0, 6, 0],
-         [8, 0, 0, 0, 6, 0, 0, 0, 3],
-         [4, 0, 0, 8, 0, 3, 0, 0, 1],
-         [7, 0, 0, 0, 2, 0, 0, 0, 6],
-         [0, 6, 0, 0, 0, 0, 2, 8, 0],
-         [0, 0, 0, 4, 1, 9, 0, 0, 5],
-         [0, 0, 0, 0, 8, 0, 0, 7, 9]]
-
-def print_board(board):
-    
-    # If there is no board
-    if board is None:
-        return None
-        print("Nothing!")
-
-    if board == []:
-        return None
-        print("This is empty!")
-
-    # boundary
-    hor_boundary = "-" * 25
-    ver_boundary = "| "
-
-    num_rols = len(board)
-    num_cols = len(board[0])
-
-    for i in range(num_rols):
-        if i % 3 == 0:
-            print(hor_boundary)
-        print_row = ""
-
-        for j in range(num_cols):
-            if j % 3 == 0:
-                print_row += ver_boundary
-            value = str(board[i][j])
-            if board[i][j] != 0:
-                value is True
-            else:
-                value == " "
-            print_row += value + " "
-        print_row += ver_boundary
-        print(print_row)   
-
-    print(hor_boundary)
-
 def find_zero(board):
-    num_rols = len(board)
-    num_cols = len(board[0])
-
-    for i in range(num_rols):
-        for j in range(num_cols):
-            if board[i][j] == 0:
-                return [i,j]
+    for r in range(9):
+        for c in range(9):
+            if board[r][c] == 0:
+                return r, c
+    return None, None
 
 
-def is_valid(board, row, col, value):
+def is_valid(board, guess, row, col):
 
-    # Check the row
-    for i in board[row]:
-        if i == value:
-            return False
-    # Check the column
-    for j in board[col]:
-        if j == value:
-            return False
+    # Check the rows first
+    if guess in board[row]:
+        return False
 
-    # Check the grid
+    # Then check the cols
+    col_vals = []
+    for i in range(9):
+        col_vals.append(board[i][col])
+    if guess in col_vals:
+        return False
+
+    # Check the 3x3 grid
+
     x = (row // 3) * 3
     y = (col // 3) * 3
 
-    for i in range(x, x+3):
-        for j in range(y, y+3):
-            if board[i][j] == value:
+    for r in range(x, x + 3):
+        for c in range(y, y + 3):
+            if board[r][c] == guess:
                 return False
+
     return True
+
 
 def solve(board):
 
     row, col = find_zero(board)
 
     if row is None:
-            return False
+        return True
 
-    for value in range(1, 10):
-        if is_valid(board, row, col, value):
-            board[row][col] == value
+    for guess in range(1, 10):
+        if is_valid(board, guess, row, col):
+            board[row][col] = guess
             if solve(board):
                 return True
-        board[row][col] == 0
-        return False
 
-solve(board)
+        board[row][col] = 0
+
+    return False
+
+
+board = [
+    [5, 3, 0, 0, 7, 0, 0, 0, 0],
+    [6, 0, 0, 1, 9, 5, 0, 0, 0],
+    [0, 9, 8, 0, 0, 0, 0, 6, 0],
+    [8, 0, 0, 0, 6, 0, 0, 0, 3],
+    [4, 0, 0, 8, 0, 3, 0, 0, 1],
+    [7, 0, 0, 0, 2, 0, 0, 0, 6],
+    [0, 6, 0, 0, 0, 0, 2, 8, 0],
+    [0, 0, 0, 4, 1, 9, 0, 0, 5],
+    [0, 0, 0, 0, 8, 0, 0, 7, 9],
+]
+
+
+print(solve(board))
 print(board)
